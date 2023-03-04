@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+.apple{
+  position: absolute; 
+  left: 320px;
+  top: 120px;  
+  height: 50px;
+  /*border:1px solid black;  FOR DEBUGGING*/
+}
+
+.car{
+  position: absolute; 
+  left: 420px;
+  top: 20px;  /*align bottoms of objects*/
+  height: 150px;
+  /*border:1px solid black;  FOR DEBUGGING*/
+}
+/*style="background-repeat: no-repeat"*/
+</style>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+</head>
+<body background="sky.png" >
+<button id="drop">Drop</button>
+<img class="apple" src="apple.png"/>
+<img class="car" src="car.png"/>
+</div>
+<script>
+
+/* Start animation */
+var startTime;
+var curX = 0;
+var curY = 300;
+var isMoving = false;
+var intervalId = -1;
+var GRAVITYONEARTH=9.80665;
+var METERSTOPIXELS = 2.0;
+
+
+function dropObjects(){
+  
+  let elapsedMillis = Date.now() - startTime;
+  //1px = 1m ???????????
+  carY = parseInt($(".car").css('top'));
+  appleY = parseInt($(".apple").css('top'));
+
+  if (isMoving){
+    let t = elapsedMillis / 1000;
+    let m = (0.5) * GRAVITYONEARTH * Math.pow(t, 2);
+    carY += m;
+    //convert the m to pixels, and set the current top
+    //carY += m * METERSTOPIXELS;
+    
+    $(".car").css('top', carY);
+    //drop one at a constant velocity...  compare...
+    $(".apple").css('top', appleY+=1);
+  }
+
+  if (elapsedMillis > 12000) {  
+    //about 12 seconds to terminal velocity
+    clearInterval(intervalId);
+  }
+}
+
+/* Start animation in the opposite direction */
+$("#drop").click(function(){
+  isMoving = true;
+  startTime = Date.now();
+  intervalId = setInterval(dropObjects, 30);
+});
+
+// Shorthand for $( document ).ready()
+$(function() {
+
+});
+
+</script>
+
+</body>
+</html>

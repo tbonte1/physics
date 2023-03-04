@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+.ropeH { 
+  position: absolute; 
+  background-color: lightyellow;
+  left: 60px;
+  top: 270px;
+  width: 300px; 
+  height: 6px;
+  border: 1px solid black;
+}
+
+.ropeV { 
+  position: absolute; 
+  background-color: lightyellow;
+  left: 320px;
+  top: 240px;
+  width: 6px; 
+  height: 300px;
+  border: 1px solid black;
+}
+
+.block { 
+  position: absolute; 
+  background-color: #abc;
+  left: 0px;
+  top: 240px;
+  width: 60px; 
+  height: 60px;
+  
+}
+.weight { 
+  position: absolute; 
+  background-color: blue;
+  left: 310px;
+  top: 400px;
+  width: 60px; 
+  height: 60px;
+  
+}
+
+.table { 
+  position: absolute; 
+  background-color: rgb(61, 27, 27);
+  left: 0px;
+  top:300px;
+  width: 300px; 
+  height: 300px;
+}
+
+.dot {
+  position: absolute; 
+  left: 320px;
+  top:280px;
+  height: 25px;
+  width: 25px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid black;
+}
+
+
+.apple{
+  position: absolute; 
+  left: 320px;
+  top: 120px;  
+  height: 50px;
+  border:1px solid black;
+}
+
+.car{
+  position: absolute; 
+  left: 420px;
+  top: 20px;  /*align bottoms of objects*/
+  height: 150px;
+  border:1px solid black;
+
+}
+/*style="background-repeat: no-repeat"*/
+</style>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <link rel="stylesheet" href="ruler2.css">
+</head>
+<body background="outerspace.png" >
+<span class="dot"></span>
+<button id="go">Go</button> 
+<button id="stop">STOP!</button>
+<button id="drop">Drop</button>
+<div class="block"></div>
+<div class="table"></div>
+<div class="weight"></div>
+<div class="ropeH"></div>
+<div class="ropeV"></div>
+<img class="apple" src="apple.png"/>
+<img class="car" src="car.png"/>
+<div class='ruler' style="">
+</div>
+<script>
+
+/* Start animation */
+var startTime;
+var curX = 0;
+var curY = 300;
+var isMoving = false;
+var intervalId = -1;
+var GRAVITYONEARTH=9.80665;
+var METERSTOPIXELS = 2.0;
+
+
+function dropObjects(){
+  
+  let elapsedMillis = Date.now() - startTime;
+  //1px = 1m ???????????
+  carY = parseInt($(".car").css('top'));
+  appleY = parseInt($(".apple").css('top'));
+
+  if (isMoving){
+    //TO DO:  Apply the formula
+    //to get seconds, elapsedMillis/1000
+
+    //now convert the m to pixels, and set the current top
+    carY += m * METERSTOPIXELS;
+    
+    $(".car").css('top', carY);
+    $(".apple").css('top', appleY+=1);
+
+    //dropping at constant velocity with no acceleration, looks... wrong
+    //$(".car").css('top', curY+=1);
+    //$(".apple").css('top', curY+=1);
+  }
+
+  if (elapsedMillis > 12000) {
+    //terminal velocity
+    clearInterval(intervalId);
+  }
+}
+
+function moveBlock(){
+  
+  let elapsedMillis = Date.now - startTime;
+
+  //1px = 1cm
+  
+  if (isMoving){
+    //TO DO:  Apply the formula
+    $(".block").css('left', curX+=1);
+    $(".weight").css('top', curY+=1);
+  }
+
+  //$("#mydiv").css('top', 200);
+  //$("#mydiv").css('left', 200);
+}
+
+
+$("#go").click(function(){
+  startTime = Date.now();
+  //alert(startTime);
+  isMoving = true;
+  intervalId = setInterval(moveBlock, 30);
+  //$(".block").animate({left: '+=100px'}, 2000);
+});
+
+/* Stop animation when button is clicked */
+$("#stop").click(function(){
+  isMoving = false;
+  clearInterval(intervalId);
+$(".block").stop();
+});
+
+/* Start animation in the opposite direction */
+$("#drop").click(function(){
+  isMoving = true;
+  startTime = Date.now();
+  intervalId = setInterval(dropObjects, 30);
+});
+
+function createTickmarks(){
+  let tickMarks = "<div class='cm'>";
+  //for (let i = 0; i < 10; i++) {
+  //  tickMarks += "<div class='mm'></div>";
+  //}
+  tickMarks += "</div>"
+  return tickMarks;
+}
+
+function createRuler(length){
+  //Append the necessary number of sections to the ruler:
+  for (let i = 0; i < length; i++) {
+    $(".ruler").append(createTickmarks());
+  }
+  $(".ruler").append("<div class='cm'></div>");
+  console.log($(".ruler").html());
+  
+}
+// Shorthand for $( document ).ready()
+$(function() {
+    console.log( "ready!" );
+    createRuler(10);
+});
+
+</script>
+
+</body>
+</html>
