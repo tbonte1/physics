@@ -5,34 +5,66 @@
 <style>
 .apple{
   position: absolute; 
-  left: 320px;
   top: 120px;  
   height: 50px;
+  content: url("apple.png");
   /*border:1px solid black;  FOR DEBUGGING*/
 }
 
 .car{
   position: absolute; 
-  left: 420px;
   top: 20px;  /*align bottoms of objects*/
   height: 150px;
+  content: url("car.png");
   /*border:1px solid black;  FOR DEBUGGING*/
 }
+
+.elephant{
+  position: absolute; 
+  top: 20px;  /*align bottoms of objects*/
+  height: 150px;
+  content: url("elephant.png");
+  /*border:1px solid black;  FOR DEBUGGING*/
+}
+
+.column1{
+  position: absolute;
+  left: 200px;
+}
+
+.column2{
+  position: absolute;
+  left: 600px;
+}
+
+
 /*style="background-repeat: no-repeat"*/
 </style>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 </head>
 <body background="sky.png" >
+<input id="hangTime"  value="6" type = "number" min = "6" max = "12" />
+<select class ="column1" id="column1">
+  <option value="apple">Apple</option>
+  <option value="car">Car</option>
+  <option value="elephant">Elephant</option>
+</select>
+<select class ="column2" id="column2">
+  <option value="apple">Apple</option>
+  <option value="car">Car</option>
+  <option value="elephant">Elephant</option>
+</select>
 <button id="drop">Drop</button>
-<img class="apple" src="apple.png"/>
-<img class="car" src="car.png"/>
+<img id = "object1" style = "position: absolute; left :200px"/>
+<img id = "object2" style = "position: absolute; left :600px"/>
 </div>
 <script>
 
 /* Start animation */
 var startTime;
 var curX = 0;
-var curY = 300;
+var obj1Y = 300;
+var obj2Y = 0;
 var isMoving = false;
 var intervalId = -1;
 var GRAVITYONEARTH=9.80665;
@@ -43,19 +75,19 @@ function dropObjects(){
   
   let elapsedMillis = Date.now() - startTime;
   //1px = 1m ???????????
-  carY = parseInt($(".car").css('top'));
-  appleY = parseInt($(".apple").css('top'));
+  obj1Y = parseInt($("#object1").css('top'));
+  obj2Y = parseInt($("#object2").css('top'));
 
   if (isMoving){
     let t = elapsedMillis / 1000;
     let m = (0.5) * GRAVITYONEARTH * Math.pow(t, 2);
-    carY += m;
+    obj1Y += m;
     //convert the m to pixels, and set the current top
-    //carY += m * METERSTOPIXELS;
+    //obj1Y += m * METERSTOPIXELS;
     
-    $(".car").css('top', carY);
+    $("#object1").css('top', obj1Y);
     //drop one at a constant velocity...  compare...
-    $(".apple").css('top', appleY+=1);
+    $("#object2").css('top', obj2Y+=1);
   }
 
   if (elapsedMillis > 12000) {  
@@ -72,8 +104,25 @@ $("#drop").click(function(){
 });
 
 // Shorthand for $( document ).ready()
-$(function() {
+$(function() {  
+  $( "#column1" ).change(function() {
+    //
+    let obj1 = $(this).val();
+    let currClass = $("#object1").attr('class');
+    $("#object1").attr('class', obj1);
+    //$("#object1").removeClass(currClass);
+    //$("#object1").addClass(obj1);
 
+  });
+  $( "#column2" ).change(function() {
+    //
+    let obj2 = $(this).val();
+    let currClass = $("#object2").attr('class');
+    $("#object2").attr('class', obj2);
+    //$("#object2").removeClass(currClass);
+    //$("#object2").addClass(obj2);
+
+  });
 });
 
 </script>
