@@ -7,7 +7,7 @@
   position: absolute; 
   top: 210px;  
   height: 10px;
-  content: url("apple.png");
+  content: url("https://raw.githubusercontent.com/tbonte1/physics/main/apple.jpg");
   /*border:1px solid black;  FOR DEBUGGING*/
 }
 
@@ -15,7 +15,7 @@
   position: absolute; 
   top: 70px;  /*align bottoms of objects*/
   height: 150px;
-  content: url("car.png");
+  content: url("https://raw.githubusercontent.com/tbonte1/physics/main/car.png");
   /*border:1px solid black;  FOR DEBUGGING*/
 }
 
@@ -23,7 +23,7 @@
   position: absolute; 
   top: 20px;  /*align bottoms of objects*/
   height: 200px;
-  content: url("elephant.png");
+  content: url("https://raw.githubusercontent.com/tbonte1/physics/main/elephant.png");
   /*border:1px solid black;  FOR DEBUGGING*/
 }
 
@@ -42,7 +42,7 @@
 
 /*style="background-repeat: no-repeat"*/
 </style>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="https://code.jquery.com/jquery-latest.js"></script>
 </head>
 <body background="sky.png" >
 Simulation Seconds:  <input id="hangTime" style = "width:50px" value="1" type = "number" min = "1" max = "12" />
@@ -100,9 +100,17 @@ function dropObjects(){
   if (elapsedMillis > hangTime * 1000) {  
     //about 12 seconds to terminal velocity
     clearInterval(intervalId);
+    
+    let t = hangTime;
+    let m = (0.5) * GRAVITYONEARTH * Math.pow(t, 2);
 
-    //
-    $('#results').html("hello!");
+    let obj1Name=$( "#column1" ).val();
+    let obj2Name=$( "#column2" ).val();
+
+
+    let results = `After ${hangTime} seconds, the ${obj1Name} fell ${m.toFixed(2)} meters and the ${obj2Name} fell ${m.toFixed(2)} meters. Even though they are falling at the same rate, the object with the larger mass will have a larger impact force should it come in contact with another object.`;
+
+    $('#results').html(results);
 
 
   }
@@ -119,10 +127,7 @@ $("#drop").click(function(){
 });
 
 $("#reset").click(function(){
-  $("#object1").css('top', obj1startY);
-  $("#object2").css('top', obj2startY);
-  isMoving = false;
-  clearInterval(intervalId);
+  location.reload();
 });
 
 // Shorthand for $( document ).ready()
@@ -132,8 +137,6 @@ $(function() {
     let obj1 = $(this).val();
     let currClass = $("#object1").attr('class');
     $("#object1").attr('class', obj1);
-
-    alert($(".getproperty").css("top", obj1));
     obj1startY = parseInt($("#object1").css('top'));
   });
   $( "#column2" ).change(function() {
