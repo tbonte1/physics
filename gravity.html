@@ -5,24 +5,24 @@
 <style>
 .apple{
   position: absolute; 
-  top: 130px;  
-  height: 40px;
+  top: 210px;  
+  height: 10px;
   content: url("apple.png");
   /*border:1px solid black;  FOR DEBUGGING*/
 }
 
 .car{
   position: absolute; 
-  top: 40px;  /*align bottoms of objects*/
-  height: 130px;
+  top: 70px;  /*align bottoms of objects*/
+  height: 150px;
   content: url("car.png");
   /*border:1px solid black;  FOR DEBUGGING*/
 }
 
 .elephant{
   position: absolute; 
-  top: 50px;  /*align bottoms of objects*/
-  height: 120px;
+  top: 20px;  /*align bottoms of objects*/
+  height: 200px;
   content: url("elephant.png");
   /*border:1px solid black;  FOR DEBUGGING*/
 }
@@ -35,7 +35,7 @@
 
 .column2{
   position: absolute;
-  left: 700px;
+  left: 600px;
   top:0px;
 }
 
@@ -45,21 +45,13 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 </head>
 <body background="sky.png" >
-Simulation Seconds:  <input id="hangTime" style = "width:50px" value="6" type = "number" min = "6" max = "12" />
+Simulation Seconds:  <input id="hangTime" style = "width:50px" value="1" type = "number" min = "1" max = "12" />
 <br />
 <select class ="column1" id="column1">
   <option value="apple" selected>Apple</option>
   <option value="car">Car</option>
   <option value="elephant">Elephant</option>
 </select>
-<fieldset>
-  <legend>Acceleration</legend>
-<input type="radio" id="constant" name="accel" value="HTML">
-<label for="constant">0, Constant Velocity</label><br>
-<input type="radio" id="gravity" name="accel" value="CSS">
-<label for="gravity">Gravity</label><br>
-</fieldset>
-
 
 <select class ="column2" id="column2">
   <option value="apple">Apple</option>
@@ -67,6 +59,9 @@ Simulation Seconds:  <input id="hangTime" style = "width:50px" value="6" type = 
   <option value="elephant">Elephant</option>
 </select>
 <button id="drop">Drop</button>
+<button id="reset">Reset</button>
+<br />
+<label id="results"></label>
 <img id = "object1" class="apple" style = "position: absolute; left :200px"/>
 <img id = "object2" class="car"  style = "position: absolute; left :700px"/>
 </div>
@@ -75,46 +70,59 @@ Simulation Seconds:  <input id="hangTime" style = "width:50px" value="6" type = 
 /* Start animation */
 var startTime;
 var curX = 0;
-var obj1Y = 300;
-var obj2Y = 0;
+var obj1startY = 210;  //apple by default
+var obj2startY = 70;  //car
 var isMoving = false;
 var intervalId = -1;
 var GRAVITYONEARTH=9.80665;
 var METERSTOPIXELS = 2.0;
-var hangTime = 6;
+var hangTime = 1;
+var PIXELSTOM = 100.0;
 
 
 function dropObjects(){
   
   let elapsedMillis = Date.now() - startTime;
   //1px = 1m ???????????
-  obj1Y = parseInt($("#object1").css('top'));
-  obj2Y = parseInt($("#object2").css('top'));
 
   if (isMoving){
     let t = elapsedMillis / 1000;
     let m = (0.5) * GRAVITYONEARTH * Math.pow(t, 2);
-    obj1Y += m;
-    //convert the m to pixels, and set the current top
-    //obj1Y += m * METERSTOPIXELS;
+    obj1Y = obj1startY + (m * PIXELSTOM);
+    obj2Y = obj2startY + (m * PIXELSTOM);
+    console.log(t, m, obj1Y);
     
     $("#object1").css('top', obj1Y);
     //drop one at a constant velocity...  compare...
-    $("#object2").css('top', obj2Y+=1);
+    $("#object2").css('top', obj2Y);
   }
 
   if (elapsedMillis > hangTime * 1000) {  
     //about 12 seconds to terminal velocity
     clearInterval(intervalId);
+
+    //
+    $('#results').html("hello!");
+
+
   }
 }
 
 /* Start animation in the opposite direction */
 $("#drop").click(function(){
+  obj1startY = parseInt($("#object1").css('top'));
+  obj2startY = parseInt($("#object2").css('top'));
   hangTime = parseInt($("#hangTime").val());
   isMoving = true;
   startTime = Date.now();
   intervalId = setInterval(dropObjects, 30);
+});
+
+$("#reset").click(function(){
+  $("#object1").css('top', obj1startY);
+  $("#object2").css('top', obj2startY);
+  isMoving = false;
+  clearInterval(intervalId);
 });
 
 // Shorthand for $( document ).ready()
@@ -125,11 +133,15 @@ $(function() {
     let currClass = $("#object1").attr('class');
     $("#object1").attr('class', obj1);
 
+    alert($(".getproperty").css("top", obj1));
+    obj1startY = parseInt($("#object1").css('top'));
   });
   $( "#column2" ).change(function() {
     let obj2 = $(this).val();
     let currClass = $("#object2").attr('class');
     $("#object2").attr('class', obj2);
+    obj2startY = parseInt($("#object2").css('top'));
+  
   });
 });
 
