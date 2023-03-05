@@ -7,7 +7,7 @@
   position: absolute; 
   top: 210px;  
   height: 10px;
-  content: url("https://raw.githubusercontent.com/tbonte1/physics/main/apple.jpg");
+  content: url("https://raw.githubusercontent.com/tbonte1/physics/main/apple.png");
   /*border:1px solid black;  FOR DEBUGGING*/
 }
 
@@ -45,7 +45,7 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 </head>
 <body background="sky.png" >
-Simulation Seconds:  <input id="hangTime" style = "width:50px" value="1" type = "number" min = "1" max = "12" />
+Simulation Seconds:  <input id="hangTime" style="width:30px" value="1" type = "number" min = "1" max = "12" />
 <br />
 <select class ="column1" id="column1">
   <option value="apple" selected>Apple</option>
@@ -126,10 +126,7 @@ $("#drop").click(function(){
 });
 
 $("#reset").click(function(){
-  $("#object1").css('top', obj1startY);
-  $("#object2").css('top', obj2startY);
-  isMoving = false;
-  clearInterval(intervalId);
+  location.reload();
 });
 
 // Shorthand for $( document ).ready()
