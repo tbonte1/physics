@@ -30,13 +30,13 @@
 .column1{
   position: absolute;
   left: 200px;
-  top:0px;
+  top:40px;
 }
 
 .column2{
   position: absolute;
   left: 600px;
-  top:0px;
+  top:40px;
 }
 
 
@@ -44,7 +44,8 @@
 </style>
 <script src="https://code.jquery.com/jquery-latest.js"></script>
 </head>
-<body background="sky.png" >
+<body background="https://raw.githubusercontent.com/tbonte1/physics/main/sky.png" >
+  <h3>Acceleration example (ignoring air resistance)</h3>
 Simulation Seconds:  <input id="hangTime" style="width:30px" value="1" type = "number" min = "1" max = "12" />
 <br />
 <select class ="column1" id="column1">
@@ -136,8 +137,6 @@ $(function() {
     let obj1 = $(this).val();
     let currClass = $("#object1").attr('class');
     $("#object1").attr('class', obj1);
-
-    alert($(".getproperty").css("top", obj1));
     obj1startY = parseInt($("#object1").css('top'));
   });
   $( "#column2" ).change(function() {
