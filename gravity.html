@@ -7,7 +7,7 @@
   position: absolute; 
   top: 210px;  
   height: 10px;
-  content: url("apple.png");
+  content: url("https://raw.githubusercontent.com/tbonte1/physics/main/apple.jpg");
   /*border:1px solid black;  FOR DEBUGGING*/
 }
 
@@ -15,7 +15,7 @@
   position: absolute; 
   top: 70px;  /*align bottoms of objects*/
   height: 150px;
-  content: url("car.png");
+  content: url("https://raw.githubusercontent.com/tbonte1/physics/main/car.png");
   /*border:1px solid black;  FOR DEBUGGING*/
 }
 
@@ -23,7 +23,7 @@
   position: absolute; 
   top: 20px;  /*align bottoms of objects*/
   height: 200px;
-  content: url("elephant.png");
+  content: url("https://raw.githubusercontent.com/tbonte1/physics/main/elephant.png");
   /*border:1px solid black;  FOR DEBUGGING*/
 }
 
@@ -61,7 +61,7 @@ Simulation Seconds:  <input id="hangTime" style = "width:50px" value="1" type = 
 <button id="drop">Drop</button>
 <button id="reset">Reset</button>
 <br />
-<label id="results"></label>
+<div id="results" style="width:200px"></div>
 <img id = "object1" class="apple" style = "position: absolute; left :200px"/>
 <img id = "object2" class="car"  style = "position: absolute; left :700px"/>
 </div>
@@ -100,9 +100,16 @@ function dropObjects(){
   if (elapsedMillis > hangTime * 1000) {  
     //about 12 seconds to terminal velocity
     clearInterval(intervalId);
+    let t = hangTime;
+    let m = (0.5) * GRAVITYONEARTH * Math.pow(t, 2);
 
-    //
-    $('#results').html("hello!");
+    let obj1Name=$( "#column1" ).val();
+    let obj2Name=$( "#column2" ).val();
+
+
+    let results = `After ${hangTime} seconds, the ${obj1Name} fell ${m.toFixed(2)} meters and the ${obj2Name} fell ${m.toFixed(2)} meters. Even though they are falling at the same rate, the object with the larger mass will have a larger impact force should it come in contact with another object.`;
+
+    $('#results').html(results);
 
 
   }
