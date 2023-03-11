@@ -4,8 +4,9 @@ To see the code working in a browser, click here:
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://js-rqty3s.stackblitz.io)
 
+To view the code in edit mode and make changes, use this link:
 <a href="https://stackblitz.com/edit/js-rqty3s?file=README.md,index.html">
-  <img
+<img
     alt="Open in StackBlitz"
     src="https://developer.stackblitz.com/img/open_in_stackblitz.svg"
   />
