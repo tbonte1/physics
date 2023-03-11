@@ -13,29 +13,29 @@
 
 .car{
   position: absolute; 
-  top: 70px;  /*align bottoms of objects*/
-  height: 150px;
+  top: 80px;  /*align bottoms of objects*/
+  height: 140px;
   content: url("https://raw.githubusercontent.com/tbonte1/physics/main/car.png");
   /*border:1px solid black;  FOR DEBUGGING*/
 }
 
 .elephant{
   position: absolute; 
-  top: 20px;  /*align bottoms of objects*/
-  height: 200px;
+  top: 40px;  /*align bottoms of objects*/
+  height: 160px;
   content: url("https://raw.githubusercontent.com/tbonte1/physics/main/elephant.png");
   /*border:1px solid black;  FOR DEBUGGING*/
 }
 
 .column1{
   position: absolute;
-  left: 200px;
+  left: 250px;
   top:40px;
 }
 
 .column2{
   position: absolute;
-  left: 600px;
+  left: 700px;
   top:40px;
 }
 
@@ -45,7 +45,9 @@
 <script src="https://code.jquery.com/jquery-latest.js"></script>
 </head>
 <body background="https://raw.githubusercontent.com/tbonte1/physics/main/sky.png" >
+  <div style="text-align:center">
   <h3>Acceleration example (ignoring air resistance)</h3>
+  </div>
 Simulation Seconds:  <input id="hangTime" style="width:30px" value="1" type = "number" min = "1" max = "12" />
 <br />
 <select class ="column1" id="column1">
@@ -63,7 +65,7 @@ Simulation Seconds:  <input id="hangTime" style="width:30px" value="1" type = "n
 <button id="reset">Reset</button>
 <br />
 <div id="results" style="width:200px"></div>
-<img id = "object1" class="apple" style = "position: absolute; left :200px"/>
+<img id = "object1" class="apple" style = "position: absolute; left :250px"/>
 <img id = "object2" class="car"  style = "position: absolute; left :700px"/>
 </div>
 <script>
@@ -80,6 +82,20 @@ var METERSTOPIXELS = 2.0;
 var hangTime = 1;
 var PIXELSTOM = 100.0;
 
+var objectTops =[
+  {
+    "name": "apple",
+    "top": 210
+  },
+  {
+    "name": "elephant",
+    "top": 60
+  },
+  {
+    "name": "car",
+    "top": 80
+  }
+]
 
 function dropObjects(){
   
@@ -100,6 +116,8 @@ function dropObjects(){
 
   if (elapsedMillis > hangTime * 1000) {  
     //about 12 seconds to terminal velocity
+    $("#drop").prop('disabled', false);
+    $("#reset").prop('disabled', false);
     clearInterval(intervalId);
     let t = hangTime;
     let m = (0.5) * GRAVITYONEARTH * Math.pow(t, 2);
@@ -111,13 +129,13 @@ function dropObjects(){
     let results = `After ${hangTime} seconds, the ${obj1Name} fell ${m.toFixed(2)} meters and the ${obj2Name} fell ${m.toFixed(2)} meters. Even though they are falling at the same rate, the object with the larger mass will have a larger impact force should it come in contact with another object.`;
 
     $('#results').html(results);
-
-
   }
 }
 
 /* Start animation in the opposite direction */
 $("#drop").click(function(){
+  $("#drop").prop('disabled', true);
+  $("#reset").prop('disabled', true);
   obj1startY = parseInt($("#object1").css('top'));
   obj2startY = parseInt($("#object2").css('top'));
   hangTime = parseInt($("#hangTime").val());
@@ -126,25 +144,37 @@ $("#drop").click(function(){
   intervalId = setInterval(dropObjects, 30);
 });
 
+function resetObjects(){
+  let curObj = $( "#column1" ).val();
+  console.log(curObj);
+  let curTop = objectTops.find(x => x.name == curObj).top;
+  $("#object1").css('top', curTop);
+
+  curObj = $("#column2").val();
+  curTop = objectTops.find(x => x.name == curObj).top;
+  console.log(curObj);
+  console.log(curTop);
+  $("#object2").css('top', curTop);
+
+}
+
 $("#reset").click(function(){
-  location.reload();
+  resetObjects();
 });
 
 // Shorthand for $( document ).ready()
 $(function() {  
   $( "#column1" ).change(function() {
-    //
     let obj1 = $(this).val();
     let currClass = $("#object1").attr('class');
     $("#object1").attr('class', obj1);
-    obj1startY = parseInt($("#object1").css('top'));
+    resetObjects();
   });
   $( "#column2" ).change(function() {
     let obj2 = $(this).val();
     let currClass = $("#object2").attr('class');
     $("#object2").attr('class', obj2);
-    obj2startY = parseInt($("#object2").css('top'));
-  
+    resetObjects();
   });
 });
 
